@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="">
+	<!--[if IE]>
+	<link type="text/css" rel="stylesheet" href="">
+	<![endif]-->
+	<title></title>
+	<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: arial, sans-serif;
+		font-size: 62.5%;
+	}
+	#page {
+		width: 77%;
+		margin: auto;
+		font-size: 1.2em;
+	}
+	#quesboard ol {
+		list-style-type: upper-alpha;
+	}
+	#quesboard ol li {
+		padding: 5px;
+	}
+	#quesboard input[type="radio"] {
+		vertical-align: bottom;
+	}
+	#quesboard input[type="checkbox"] {
+		vertical-align: middle;
+	}
+	#notice {
+		color: red;
+	}
+	#loadingbg {
+		width: 50%;
+		border: 1px solid #888888;
+		margin-top: 50px;
+		height: 10px;
+	}
+	#loading {
+		width: 0;
+		background: #777777;
+		height: 10px;
+	}
+	.spanl {
+		border: 1px solid #999999;
+		padding: 2px;
+		background: #999999;
+	}
+	.spanr {
+		cursor: move;
+		margin-left: 71px;
+		z-index: 1024;
+		position: absolute;
+		border: 1px solid green;
+		background: white;
+		padding: 2px;
+	}
+	.spanh {
+		margin-left: 71px;
+		z-index: 1000;
+		position: absolute;
+	}
+	</style>
+</head>
+<body>
+
+<div id="page">
+	<div id="loadingbg">
+		<div id="loading"></div>
+	</div>
+	<div id="quesboard">
+		<h3 id="questitle"></h3>
+		<ol id="queslist"></ol>
+		<p id="notice"></p>
+		<button id="next">开始答题</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+var order = null;
+var category = null;
+var ans = null;
+var maxQues = null;
+var Apos = '';
+var drawAns = [];
+$(document).ready(function(){
+	$('#next').click(function(){
+		$('#notice').text('');
+		if (order !== null) {
+			if (splitCat(category)[0] == 1) {
+				var usrAns = $('#queslist').find(':radio[name=answer][checked]').val();
+				if (typeof usrAns == 'undefined') {
+					$('#notice').text('请选择答案');
+					setTimeout(function(){
+						$('#notice').text('');
+					}, 3000);
+					return false;
+				}
+			} else if (splitCat(category)[0] == 2) {
+				var usrAns = '';
+				$('#queslist').find(':checkbox[checked]').each(function(i){
+					usrAns += this.value + ';';
+				});
+				usrAns = usrAns.slice(0, -1);
+				if (usrAns.length <= 1) {
+					$('#notice').text('此题为多选题');
+					setTimeout(function(){
+						$('#notice').text('');
+					}, 3000);
+					return false;
+				}
+			} else {
+				var usrAns = '';
+				for (da in drawAns) {
+					if (drawAns[da] == null) {
+						$('#notice').text('请回答完整');
+						setTimeout(function(){
+							$('#notice').text('');
+						}, 3000);
+						return false;
+					}
+					usrAns += drawAns[da] + ';';
+				}
+				usrAns = usrAns.slice(0, -1);
+			}
+			if (splitCat(category)[1] == 'y' && usrAns != ans) {
+				alert('此题回答错误，将重新开始');
+				window.location.href = window.location.href;
+			} else {
+				drawAns = [];
+				$('.spanr').remove();
+				var loadpercent = (order + 1) / maxQues * 100;
+				$('#loading').css('width', loadpercent + '%');
+				if (order == 0) {
+					var ansCookie = '';
+				} else {
+					var ansCookie = getCookie('anscookie');
+				}
+				ansCookie += usrAns.replace(/;/g, 'a') + '*';
+				document.cookie = 'anscookie=' + ansCookie + ';';
+				if (order == maxQues - 1) {
+					var allAns = getCookie('anscookie');
+					allAns = allAns.replace(/a/g, ';');
+					allAns = allAns.slice(0, -1);
+					arrayAns = allAns.split('*');
+					$.ajax({
+						type: 'get',
+						url: './question.xml',
+						success: function(xml){
+							var results = document.createDocumentFragment();
+							var r = 0;
+							$(xml).find('QUESTION').each(function(i){
+								var div = document.createElement('div');
+								var title = document.createElement('h3');
+								var ol = document.createElement('ol');
+								var exp = document.createElement('p');
+								var rightAns = document.createElement('span');
+								var selfAns = document.createElement('span');
+								title.appendChild(document.createTextNode(i + 1 +'、' + $(this).children('TITLE').text()));
+								exp.appendChild(document.createTextNode('题目解析：' + $(this).children('EXPLAIN').text()));
+								if (splitCat($(this).children('CATEGORY').text())[0] == 1) {
+									var rightLetter = String.fromCharCode(parseInt($(this).children('ANS').text()) + 64);
+									var selfLetter = String.fromCharCode(parseInt(arrayAns[i]) + 64);
+								} else if (splitCat($(this).children('CATEGORY').text())[0] == 2) {
+									var rightLetter = $(this).children('ANS').text().replace(/[0-9]+/g, function(num){
+										return String.fromCharCode(parseInt(num) + 64);
+									});
+									rightLetter = rightLetter.replace(/;/g, '、');
+									var selfLetter = arrayAns[i].replace(/[0-9]+/g, function(num){
+										return String.fromCharCode(parseInt(num) + 64);
+									});
+									selfLetter = selfLetter.replace(/;/g, '、');
+								} else {
+									var rightLetter = $(this).children('ANS').text().replace(/;/g, '；');
+									var selfLetter = arrayAns[i].replace(/;/g, '；');
+								}
+								rightAns.appendChild(document.createTextNode('正确答案：' + rightLetter));
+								selfAns.appendChild(document.createTextNode('你的答案：' + selfLetter));
+								if (selfLetter == rightLetter) {
+									selfAns.style.color = 'green';
+									r++;
+								} else {
+									selfAns.style.color = 'red';
+								}
+								selfAns.style.display = 'block';
+								$(this).find('LIST').each(function(){
+									var li = document.createElement('li');
+									li.appendChild(document.createTextNode($(this).text()));
+									ol.appendChild(li);
+								});
+								div.appendChild(title);
+								div.appendChild(ol);
+								div.appendChild(exp);
+								div.appendChild(rightAns);
+								div.appendChild(selfAns);
+								results.appendChild(div);
+							});
+							$('#quesboard').html('<p>正确率：<font color="green">' + r + '</font>/<font>' + maxQues + '</font></p>');
+							$('#quesboard').append(results);
+						}
+					});
+				} else {
+					getData();
+				}
+			}
+		} else {
+			var date = new Date();
+			date.setTime(date.getTime() - 3600*1000);
+			document.cookie = 'anscookie=1024; expires=' + date.toGMTString();
+			getData();
+		}
+	});
+});
+function getData() {
+	$.ajax({
+		type: 'get',
+		url: './question.xml',
+		success: function(xml){
+			if (order == null) {
+				loadQuestion(xml, 0);
+			} else {
+				loadQuestion(xml, order+1);
+			}
+		}
+	});
+}
+function loadQuestion(xml, ordernum) {
+	var lists = document.createDocumentFragment();
+	var $question = $(xml).find('QUESTION:eq(' + ordernum + ')');
+	order = ordernum;
+	category = $question.children('CATEGORY').text();
+	ans = $question.children('ANS').text();
+	$('#questitle').text(ordernum + 1 + '、' + $question.children('TITLE').text());
+	$question.find('LIST').each(function(i){
+		var li = document.createElement('li');
+		var input = document.createElement('input');
+		if (splitCat(category)[0] == 1) {
+			input.type = 'radio';
+			input.name = 'answer';
+		} else if (splitCat(category)[0] == 2) {
+			input.type = 'checkbox';
+		} else {
+			input.type = 'hidden';
+		}
+		input.value = i + 1;
+		if (splitCat(category)[0] != 3) {
+			var label = document.createElement('label');
+			var list = document.createTextNode($(this).text());
+			label.appendChild(list);
+			li.appendChild(input);
+			li.appendChild(label);
+			lists.appendChild(li);
+		} else {
+			drawAns[i] = null;
+			var spanL = document.createElement('span');
+			$(spanL).addClass('spanl');
+			var spanR = document.createElement('span');
+			$(spanR).addClass('spanr');
+			var spanH = document.createElement('span');
+			$(spanH).addClass('spanh');
+			var textL = document.createTextNode($(this).find('L').text());
+			var textR = document.createTextNode($(this).find('R').text());
+			spanL.appendChild(textL);
+			spanR.appendChild(textR);
+			li.appendChild(input);
+			li.appendChild(spanL);
+			li.appendChild(spanR);
+			li.appendChild(spanH);
+			lists.appendChild(li);
+		}
+	});
+	$('#queslist').html(lists);
+	$('#queslist label').click(function(){
+		var checkbox = $(this).prev()[0];
+		if (checkbox.type == 'checkbox') {
+			if (checkbox.checked == true) {
+				checkbox.checked = false;
+			} else {
+				checkbox.checked = true;
+			}
+		} else {
+			checkbox.checked = true;
+		}
+	});
+	if (ordernum == 0) {
+		maxQues = $(xml).find('QUESTION').size();
+		$('#next').text('下一题');
+	}
+	if (splitCat(category)[0] == 3) {
+		var $spanr = $('.spanr');
+		$spanr.each(function(){
+			$(this).css('top', this.offsetTop);
+			$(this).css('left', this.offsetLeft);
+			Apos += $(this).prev()[0].offsetLeft + '*' + $(this).prev()[0].offsetTop + ',';
+		});
+		Apos = Apos.slice(0, -1);
+		Apos = Apos.split(',');
+		$spanr.addClass('init');
+		$spanr.attr('onmousedown', 'mousedown(event, this);');
+	}
+}
+function mousedown(e, elem) {
+	var posX = null;
+	var posY = null;
+	for (apos in Apos) {
+		var xny = Apos[apos].split('*');
+		var posx = xny[0];
+		var posy = xny[1];
+		if (elem.offsetLeft == posx && elem.offsetTop == posy) {
+			drawAns[apos] = null;
+			break;
+		}
+	}
+	if (!e) e = window.event;
+	posX = e.clientX - parseInt(elem.style.left);
+	posY = e.clientY - parseInt(elem.style.top);
+	document.onmousemove = mousemove;
+	document.onmouseup = function() {
+		document.onmousemove = null;
+		var isFind = false;
+		var aposOrder = null;
+		for (apos in Apos) {
+			var xny = Apos[apos].split('*');
+			var posx = xny[0];
+			var posy = xny[1];
+			var overflow = false;
+			if (Math.abs(posy - elem.offsetTop) < 10 && Math.abs(posx - elem.offsetLeft) < 70) {
+				elem.style.margin = 'auto';
+				$('.spanr').each(function(){
+					if (this.offsetLeft == posx && this.offsetTop == posy) {
+						overflow = true;
+						return false;
+					}
+				});
+				if (overflow == true) {
+					break;
+				}
+				elem.style.left = posx + 'px';
+				elem.style.top = posy + 'px';
+				isFind = true;
+				$(elem).removeClass('init');
+				aposOrder = apos;
+				break;
+			}
+		}
+		if (isFind == false) {
+			if (typeof $(elem).next()[0] != 'undefined') {
+				elem.style.left = $(elem).next()[0].offsetLeft + 'px';
+				elem.style.top = $(elem).next()[0].offsetTop + 'px';
+				elem.style.marginLeft = '71px';
+				$(elem).addClass('init');
+				aposOrder = null;
+			}
+		}
+		if (aposOrder != null) {
+			drawAns[aposOrder] = (parseInt(aposOrder) + 1) + '-' + $(elem).prev().prev().val();
+		}
+	}
+	function mousemove(mm) {
+		var targ;
+		if (!mm) mm = window.event;
+		elem.style.left = (mm.clientX - posX) + 'px';
+		elem.style.top = (mm.clientY - posY) + 'px';
+	}
+}
+function splitCat(data) {
+	var cat = data.split(';');
+	return cat;
+}
+function splitAns(data) {
+	var ans = data.split(';');
+	return ans;
+}
+function getCookie(name) {
+	var cookieValue = null;
+	if (document.cookie && document.cookie != '') {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = jQuery.trim(cookies[i]);
+			if (cookie.substring(0, name.length + 1) == (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
+}
+</script>
+</body>
+</html>

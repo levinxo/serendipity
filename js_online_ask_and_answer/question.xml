@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+CATEGORY标签中第一个参数1代表单选，2代表多选，3代表画线题；第二个参数y表示一定要回答正确，n表示不需要回答正确
+ANS标签表示正确答案
+-->
+<DATA>
+
+	<QUESTION>
+		<TITLE>第一个问题</TITLE>
+		<CATEGORY>1;y</CATEGORY>
+		<CHOICE>
+			<LIST>ans1</LIST>
+			<LIST>ans2</LIST>
+			<LIST>ans3</LIST>
+			<LIST>ans4</LIST>
+		</CHOICE>
+		<ANS>2</ANS>
+		<EXPLAIN>讲解1</EXPLAIN>
+	</QUESTION>
+	<QUESTION>
+		<TITLE>第五个问题</TITLE>
+		<CATEGORY>3;n</CATEGORY>
+		<CHOICE>
+			<LIST>
+				<L>left1</L>
+				<R>right1</R>
+			</LIST>
+			<LIST>
+				<L>left2</L>
+				<R>right2</R>
+			</LIST>
+			<LIST>
+				<L>left3</L>
+				<R>right3</R>
+			</LIST>
+			<LIST>
+				<L>left4</L>
+				<R>right4</R>
+			</LIST>
+			<LIST>
+				<L>left5</L>
+				<R>right5</R>
+			</LIST>
+		</CHOICE>
+		<ANS>1-2;2-3;3-4;4-5;5-1</ANS>
+		<EXPLAIN>讲解5</EXPLAIN>
+	</QUESTION>
+	<QUESTION>
+		<TITLE>第二个问题</TITLE>
+		<CATEGORY>1;n</CATEGORY>
+		<CHOICE>
+			<LIST>ans1</LIST>
+			<LIST>ans2</LIST>
+			<LIST>ans3</LIST>
+			<LIST>ans4</LIST>
+			<LIST>ans5</LIST>
+		</CHOICE>
+		<ANS>2</ANS>
+		<EXPLAIN>讲解2</EXPLAIN>
+	</QUESTION>
+	<QUESTION>
+		<TITLE>第三个问题</TITLE>
+		<CATEGORY>2;y</CATEGORY>
+		<CHOICE>
+			<LIST>ans1</LIST>
+			<LIST>ans2</LIST>
+			<LIST>ans3</LIST>
+			<LIST>ans4</LIST>
+			<LIST>ans5</LIST>
+		</CHOICE>
+		<ANS>1;2</ANS>
+		<EXPLAIN>讲解3</EXPLAIN>
+	</QUESTION>
+	<QUESTION>
+		<TITLE>第四个问题</TITLE>
+		<CATEGORY>2;n</CATEGORY>
+		<CHOICE>
+			<LIST>ans1</LIST>
+			<LIST>ans2</LIST>
+			<LIST>ans3</LIST>
+			<LIST>ans4</LIST>
+			<LIST>ans5</LIST>
+			<LIST>ans6</LIST>
+		</CHOICE>
+		<ANS>3;4</ANS>
+		<EXPLAIN>讲解4</EXPLAIN>
+	</QUESTION>
+
+</DATA>
