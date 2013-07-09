@@ -1,0 +1,33 @@
+
+
+<canvas id="logo" width="24" height="20">
+</canvas>
+
+
+
+
+<script>
+var logo = document.getElementById('logo');
+if (logo.getContext){
+	var canvas = logo.getContext('2d');
+	canvas.beginPath();
+	canvas.arc(10, 10, 10, 0, -1.1);
+	canvas.lineTo(10, 10);
+	canvas.fillStyle = 'rgb(253, 138, 7)';
+	canvas.closePath();
+	canvas.fill();
+	canvas.beginPath();
+	canvas.arc(16, 6, 2, 0, 2*Math.PI);
+	canvas.closePath();
+	canvas.fill();
+	//这是第二颗豆子，感觉不是很好看，暂时撤掉了
+	/*canvas.beginPath();
+	canvas.arc(22, 4, 2, 0, 2*Math.PI);
+	canvas.closePath();
+	canvas.fill();*/
+	canvas.beginPath();
+	canvas.arc(7, 6, 1, 0, 2*Math.PI);
+	canvas.fillStyle = 'rgb(0, 0, 0)';
+	canvas.fill();
+}
+</script>
