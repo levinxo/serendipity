@@ -1,0 +1,126 @@
+<head>
+    <meta charset="utf-8" />
+</head>
+
+
+<button onclick="mk_alert('请填写…');">click</button>
+
+
+<style type="text/css">
+    #mk_dialog {
+        background: #000000;
+        opacity: 0.25;
+        z-index: 10240;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+    #mk_dialog_output {
+        background: rgb(255, 255, 255);
+        z-index: 10250;
+        min-width: 300px;
+        position: fixed;
+        text-align: center;
+        border-radius: 7px;
+        border: solid 1px #C6C6C6;
+        -webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.1);
+        box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+    #mk_dialog_title {
+        font-size: 16px;
+        padding: 5px;
+        cursor: move;
+        text-align: right;
+    }
+    #mk_dialog_close {
+        font-size: 20px;
+        cursor: pointer;
+    }
+    #mk_dialog_teller {
+        margin-top: 52px;
+        font-size: 16px;
+    }
+    .mk_button {
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -o-linear-gradient(top, #F5F5F5, #F1F1F1);
+        border: solid 1px rgba(0, 0, 0, 0.1);
+        padding: 3px 10px;
+        border-radius: 2px;
+        -webkit-border-radius: 2px;
+        font-family: "微软雅黑", Microsoft YaHei, arial, sans-serif;
+        font-size: 16px;
+    }
+    .mk_button:hover {
+        background: -moz-linear-gradient(top, #F8F8F8, #F1F1F1);
+        background: -webkit-linear-gradient(top, #F8F8F8, #F1F1F1);
+        background: -o-linear-gradient(top, #F8F8F8, #F1F1F1);
+        border: solid 1px #C6C6C6;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+</style>
+
+<script>
+function mk_alert(msg){
+    var d = document.createDocumentFragment();
+    var d1 = document.createElement('div');
+    var d2 = document.createElement('div');
+    var d3 = document.createElement('div');
+    var d3_5 = document.createElement('span');
+    var d4 = document.createTextNode('X');
+    var d5 = document.createElement('div');
+    var d6 = document.createElement('p');
+    var d7 = document.createElement('button');
+    var d8 = document.createTextNode('确定');
+    d1.id = 'mk_dialog';
+    d2.id = 'mk_dialog_output';
+    d3.id = 'mk_dialog_title';
+    d3_5.className = 'mk_dialog_close';
+    d3_5.id = 'mk_dialog_close';
+    d3_5.appendChild(d4);
+    d3.appendChild(d3_5);
+    d5.style.margin = '0 35px';
+    d6.id = 'mk_dialog_teller';
+    d5.appendChild(d6);
+    d7.className = 'mk_dialog_close mk_button';
+    d7.style.margin = '22px auto';
+    d7.appendChild(d8);
+
+    d2.appendChild(d3);
+    d2.appendChild(d5);
+    d2.appendChild(d7);
+
+    d.appendChild(d1);
+    d.appendChild(d2);
+
+    document.body.appendChild(d);
+
+    var dialog = document.getElementById('mk_dialog');
+    var output = document.getElementById('mk_dialog_output');
+    var title = document.getElementById('mk_dialog_title');
+    var teller = document.getElementById('mk_dialog_teller');
+    var msg = msg || '';
+    msg = document.createTextNode(msg);
+    dialog.style.display = 'block';
+    output.style.display = 'block';
+    teller.appendChild(msg);
+
+    var left = (window.screen.availWidth - output.offsetWidth)/2;
+    var top = (window.screen.availHeight - output.offsetHeight)/2-100;
+    output.style.left = left+'px';
+    output.style.top = top+'px';
+
+    var close = document.getElementsByClassName('mk_dialog_close');
+    for (c in close){
+        close[c].onclick = function(){
+            document.body.removeChild(dialog);
+            document.body.removeChild(output);
+        }
+    }
+}
+</script>
