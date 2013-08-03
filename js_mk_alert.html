@@ -3,7 +3,7 @@
 </head>
 
 
-<button onclick="mk_alert('请填写…');">click</button>
+<button onclick="mk_alert('请填写…', function(){window.console && window.console.info('hello, world')});">click</button>
 
 
 <style type="text/css">
@@ -41,7 +41,7 @@
         cursor: pointer;
     }
     #mk_dialog_teller {
-        margin-top: 52px;
+        margin-top: 35px;
         font-size: 16px;
     }
     .mk_button {
@@ -66,7 +66,7 @@
 </style>
 
 <script>
-function mk_alert(msg){
+function mk_alert(msg, callback){
     var d = document.createDocumentFragment();
     var d1 = document.createElement('div');
     var d2 = document.createElement('div');
@@ -84,7 +84,6 @@ function mk_alert(msg){
     d3_5.id = 'mk_dialog_close';
     d3_5.appendChild(d4);
     d3.appendChild(d3_5);
-    d5.style.margin = '0 35px';
     d6.id = 'mk_dialog_teller';
     d5.appendChild(d6);
     d7.className = 'mk_dialog_close mk_button';
@@ -116,10 +115,14 @@ function mk_alert(msg){
     output.style.top = top+'px';
 
     var close = document.getElementsByClassName('mk_dialog_close');
+    var callback = callback || '';
     for (c in close){
         close[c].onclick = function(){
             document.body.removeChild(dialog);
             document.body.removeChild(output);
+            if (typeof callback == 'function'){
+                callback();
+            }
         }
     }
 }
