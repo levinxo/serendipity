@@ -1,7 +1,7 @@
 import socket
 
 host = ''
-port = 80
+port = 8000
 
 y = '''HTTP/1.1 200 OK\r\nContent-Type: text/html;charset=utf-8\r\n\r\n<html>
 <h1>hello, world</h1>
