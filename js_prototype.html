@@ -1,0 +1,26 @@
+<script>
+
+var obj = (function(){
+
+	var T = function(ops){
+	
+		this.init(ops);
+	};
+
+	T.fn = T.prototype = {
+	
+		init: function(ops){
+			window.console && console.log(ops);
+		}
+		
+		,t: function(){
+			alert('hello, world');
+		}
+	};
+
+	return new T('init!');
+
+})();
+
+obj.t();
+</script>
