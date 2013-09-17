@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>waterfall</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+	
+	
+	<style type="text/css">
+	.items-fall-con {
+		width: 918px;
+		margin: auto;
+	}
+	.items-fall-con > div.active {
+	    box-shadow: 0px 1px 8px rgba(0,0,0,0.3);
+	    border-color: #c6c4c4;
+	}
+
+	.fall-item {
+	    position: absolute;
+	    background: #fff;
+	    width: 220px;
+	    height: 220px;
+	    overflow: hidden;
+	    border: 1px solid #e6e4e4;
+	    -webkit-transition: box-shadow 0.4s, border-color 0.4s;
+	    -moz-transition: box-shadow 0.4s, border-color 0.4s;
+	}
+	</style>
+
+
+	<div class="items-fall-con">
+	    <div class="fall-item">
+	    </div>
+	    <div class="fall-item">
+	    </div>
+	    <div class="fall-item">
+	    </div>
+	    <div class="fall-item">
+	    </div>
+	    <div class="fall-item">
+	    </div>
+	    <div class="fall-item">
+	    </div>
+	</div>
+
+
+
+
+
+</body>
+<script>
++function($){ "use strict";
+    $.fn.waterfall = $.prototype.waterfall = function(options){
+        var _config = {
+            item_name: '.fall-item'
+            ,column: 4
+            ,margin_right: 10
+            ,margin_bottom: 15
+        };
+        options = $.extend(_config, options);
+        this.each(function(){
+            var items_pos = [], $items = $(this).find(options.item_name),
+                item_width = $items.eq(0).outerWidth() + options.margin_right;
+            for (var i=0; i<options.column; i++){
+                items_pos.push([i*item_width+this.offsetLeft, this.offsetTop]);
+            }
+            $items.each(function(){
+                $(this).hover(function(){
+                    $(this).addClass('active');
+                }, function(){
+                    $(this).removeClass('active');
+                });
+
+                var _tmp = 0, item_height = $(this).outerHeight() + options.margin_bottom;
+                for (var i=0; i<options.column; i++){
+                    if(items_pos[i][1] < items_pos[_tmp][1]){
+                        //保存高度最小那列的序号，稍后将item移到此缺口
+                        _tmp = i;
+                    }
+                }
+                this.style.cssText = 'left: '+items_pos[_tmp][0]+'px; top: '+items_pos[_tmp][1]+'px;';
+                //插入后，更新此列的top值
+                items_pos[_tmp][1] += item_height;
+            });
+        });
+    }
+}(window.jQuery);
+
+
+
+$(document).ready(function(){
+	$('.items-fall-con').waterfall();
+});
+</script>
+</html>
