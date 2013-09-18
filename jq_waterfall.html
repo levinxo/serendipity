@@ -61,6 +61,7 @@
             ,margin_bottom: 15
         };
         options = $.extend(_config, options);
+		var final_height = [];	//保存每个瀑布流最后产生的最高高度
         this.each(function(){
             var items_pos = [], $items = $(this).find(options.item_name),
                 item_width = $items.eq(0).outerWidth() + options.margin_right;
@@ -85,14 +86,20 @@
                 //插入后，更新此列的top值
                 items_pos[_tmp][1] += item_height;
             });
+			var _tmp_height = [];
+			for (var i=0; i<items_pos.length; i++){
+				_tmp_height.push(items_pos[i][1]-this.offsetTop);	//获取每列的高度
+			}
+			final_height.push(eval('Math.max('+_tmp_height.toString()+')'));	//取最大高度
         });
+		return final_height;
     }
 }(window.jQuery);
 
 
 
 $(document).ready(function(){
-	$('.items-fall-con').waterfall();
+	window.console && console.log($('.items-fall-con').waterfall());
 });
 </script>
 </html>
