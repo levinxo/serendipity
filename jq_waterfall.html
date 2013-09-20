@@ -10,6 +10,7 @@
 	
 	<style type="text/css">
 	.items-fall-con {
+		position: relative;
 		width: 918px;
 		margin: auto;
 	}
@@ -66,7 +67,7 @@
             var items_pos = [], $items = $(this).find(options.item_name),
                 item_width = $items.eq(0).outerWidth() + options.margin_right;
             for (var i=0; i<options.column; i++){
-                items_pos.push([i*item_width+this.offsetLeft, this.offsetTop]);
+                items_pos.push([i*item_width, 0]);
             }
             $items.each(function(){
                 $(this).hover(function(){
@@ -88,7 +89,7 @@
             });
 			var _tmp_height = [];
 			for (var i=0; i<items_pos.length; i++){
-				_tmp_height.push(items_pos[i][1]-this.offsetTop);	//获取每列的高度
+				_tmp_height.push(items_pos[i][1]);	//获取每列的高度
 			}
 			final_height.push(eval('Math.max('+_tmp_height.toString()+')'));	//取最大高度
         });
