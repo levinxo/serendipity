@@ -57,7 +57,6 @@
     $.fn.waterfall = $.prototype.waterfall = function(options){
         var _config = {
             item_name: '.fall-item'
-            ,column: 4
             ,margin_right: 10
             ,margin_bottom: 15
         };
@@ -65,8 +64,12 @@
 		var final_height = [];	//保存每个瀑布流最后产生的最高高度
         this.each(function(){
             var items_pos = [], $items = $(this).find(options.item_name),
-                item_width = $items.eq(0).outerWidth() + options.margin_right;
-            for (var i=0; i<options.column; i++){
+                item_width = $items.eq(0).outerWidth() + options.margin_right,
+				column = Math.floor($(this).outerWidth()/item_width);
+				if (item_width*(column+1)-options.margin_right<=$(this).outerWidth()){
+					column+=1;
+				}
+            for (var i=0; i<column; i++){
                 items_pos.push([i*item_width, 0]);
             }
             $items.each(function(){
@@ -77,7 +80,7 @@
                 });
 
                 var _tmp = 0, item_height = $(this).outerHeight() + options.margin_bottom;
-                for (var i=0; i<options.column; i++){
+                for (var i=0; i<column; i++){
                     if(items_pos[i][1] < items_pos[_tmp][1]){
                         //保存高度最小那列的序号，稍后将item移到此缺口
                         _tmp = i;
