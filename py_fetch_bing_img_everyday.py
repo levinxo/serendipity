@@ -32,28 +32,24 @@ def _req(url):
         print e_count
         
     s.close()
+    if data == '':
+        data = _req(url)
     return data
     
 
 if __name__ == '__main__':
-    while True:
-        data = _req('http://cn.bing.com')
-        if len(data) > 0:
-            break
+    data = _req('http://cn.bing.com')
     
     reg = re.compile("g_img=\{url:'([^']+)'")
     m = reg.search(data)
     if m is not None:
-        print m.group(1)
-        while True:
-            img_data = _req(m.group(1))
-            if len(img_data) > 0:
-                break
+        print 'img url: ', m.group(1)
+        
+        img_data = _req(m.group(1))
         f = open(time.strftime('%Y-%m-%d')+'.'+m.group(1).split('.')[-1], 'wb')
         img_arr = img_data.split('\r\n\r\n')
         img_arr.pop(0)
-        img_data = ''.join(img_arr)
-        f.write(img_data)
+        f.write(''.join(img_arr))
         f.close()
         print 'fetch img success.'
         
