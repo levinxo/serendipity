@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re, socket, select, time, urlparse
+import re, socket, select, time, urlparse, os
 
 
 def _req(url):
@@ -46,12 +46,15 @@ if __name__ == '__main__':
         print 'img url: ', m.group(1)
         
         img_data = _req(m.group(1))
-        f = open(time.strftime('%Y-%m-%d')+'.'+m.group(1).split('.')[-1], 'wb')
+        if not os.path.isdir('./images'):
+            os.mkdir('./images')
+        f = open('./images/'+time.strftime('%Y-%m-%d')+'.'+m.group(1).split('.')[-1], 'wb')
         img_arr = img_data.split('\r\n\r\n')
         img_arr.pop(0)
         f.write(''.join(img_arr))
         f.close()
         print 'fetch img success.'
+        e = raw_input('Press Enter to exit..')
         
     else:
         print 'img not found.'
