@@ -46,9 +46,9 @@ if __name__ == '__main__':
         print 'img url: ', m.group(1)
         
         img_data = _req(m.group(1))
-        if not os.path.isdir('./images'):
-            os.mkdir('./images')
-        f = open('./images/'+time.strftime('%Y-%m-%d')+'.'+m.group(1).split('.')[-1], 'wb')
+        if not os.path.isdir('./bing_images'):
+            os.mkdir('./bing_images')
+        f = open('./bing_images/'+time.strftime('%Y-%m-%d')+'.'+m.group(1).split('.')[-1], 'wb')
         img_arr = img_data.split('\r\n\r\n')
         img_arr.pop(0)
         f.write(''.join(img_arr))
