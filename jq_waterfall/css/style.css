@@ -3,6 +3,9 @@
 .wf-con {
     position: relative;
     max-width: 918px;
+    min-width: 454px;
+    width: 918px;
+    width: auto;
     margin: auto;
 }
 .wf-row > div.active {

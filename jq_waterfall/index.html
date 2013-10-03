@@ -25,7 +25,7 @@
         //配置
         var _config = {
             item: null      //要加入瀑布流的item
-            ,resize: false  //是否进行重新排列
+            ,resize: false  //是否将已加入瀑布流的item进行重新排列
             ,con_class: 'wf-row' //将item包起来的外框class
             ,margin_right: 10   //右margin
             ,margin_bottom: 15  //下margin
@@ -158,7 +158,7 @@ $(document).ready(function(){
         });
     });
 
-    $(window).bind('scroll', $(window).data('wf_deal_scroll'));
+    $(window).bind('scroll', $(window).data('wf_deal_scroll')); //绑定窗口的scroll事件
     
     $(window).data('wf_resize', function(){
         $(window).unbind('resize', $(window).data('wf_resize'));
