@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>waterfall</title>
+    <link type="text/css" rel="stylesheet" href="./css/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div class="wf-con"></div>
+
+
+    <div class="wf-loading">
+        <img src="./img/wf-loading.gif">
+    </div>
+
+
+
+
+    <div class="go-top" onclick="$('html,body').animate({scrollTop: 0}, 300, 'swing');">
+        <img src="./img/go-top.png">
+    </div>
+
+
+</body>
+<script type="text/javascript">
++function($){ "use strict";
+    $.fn.waterfall = $.prototype.waterfall = function(options){
+        var _config = {
+            item: null      //此处指定要加入瀑布流的item
+            ,resize: false  //是否元素已存在，只是进行重新排列
+            ,item_outline: 'wf-row' //将item包起来的外框class
+            ,margin_right: 10   //右margin
+            ,margin_bottom: 15  //下margin
+        };
+        options = $.extend(_config, options);
+        
+
+        
+        if (!options.resize){
+            var con = document.createElement('div');
+            con.className = options.item_outline;
+            con.id = options.item_outline+($('.'+options.item_outline).length+1);
+            
+            $(con).append(options.item);
+            $(this).append(con);
+        } else {
+            var con = options.item.parent()[0];
+        }
+        
+        options.item = $('#'+con.id).children('div');
+        
+        var $items = options.item,
+            item_width = $items.eq(0).outerWidth() + options.margin_right,
+            column = Math.floor($(this).outerWidth()/item_width);
+        if (item_width*(column+1)-options.margin_right<=$(this).outerWidth()){
+            column+=1;
+        }
+        if (column < 1){
+            column = 1;
+        }
+        
+        var _tmp_height = $(this).attr('wf-item-height');
+        
+        var wf_items_pos = [];
+        if (typeof _tmp_height == 'undefined'){
+            for (var i=0; i<column; i++){
+                wf_items_pos.push([i*item_width, 0]);
+            }
+        } else {
+            _tmp_height = _tmp_height.split(',');
+            for (var i=0; i<column; i++){
+                wf_items_pos.push([i*item_width, parseInt(_tmp_height[i])]);
+            }
+        }
+
+        $items.each(function(){
+            $(this).hover(function(){
+                $(this).addClass('active');
+            }, function(){
+                $(this).removeClass('active');
+            });
+            var _tmp = 0, item_height = $(this).outerHeight() + options.margin_bottom;
+            for (var i=0; i<column; i++){
+                if(wf_items_pos[i][1] < wf_items_pos[_tmp][1]){
+                    //保存高度最小那列的序号，稍后将item移到此缺口
+                    _tmp = i;
+                }
+            }
+            this.style.left = wf_items_pos[_tmp][0]+'px';
+            this.style.top = wf_items_pos[_tmp][1]+'px';
+            //插入后，增加此列的top值
+            wf_items_pos[_tmp][1] += item_height;
+        });
+
+        var _tmp_height = [];   //重新对高度进行赋值
+        for (var i=0; i<wf_items_pos.length; i++){
+            _tmp_height.push(wf_items_pos[i][1]);    //获取每列的高度
+        }
+
+        $(this).attr('wf-item-height', _tmp_height.join(',')); //存储元素的高度位置值
+        //瀑布流产生的最高高度
+        var con_height = eval('Math.max('+_tmp_height.join(',')+')');
+
+        $('.'+options.item_outline).each(function(i){
+            if (this.id == con.id){
+                return false;
+            }
+            con_height -= $(this).outerHeight();
+        });
+
+        $('#'+con.id).css('height', con_height);
+        return true;
+    }
+}(window.jQuery);
+
+
+$(document).ready(function(){
+
+    $('.wf-con').data('wf_history', {});
+    
+    $(window).data('wf_deal_scroll', function(){
+        var empty_class = 'wf-empty';
+        var document_scroll_top = $(document).scrollTop();
+        var scroll_total = document_scroll_top + $(window).height();
+    
+        if (document_scroll_top > 0){  //如果离开最顶部，出现返回顶部按钮
+            $('.go-top').show();
+        } else {
+            $('.go-top').hide();
+        }
+    
+        if (scroll_total >= $(document).height()-10){   //如果到达页面底部
+            //清除滚动事件，防止重复加载数据
+            $(window).unbind('scroll', $(window).data('wf_deal_scroll'));
+            ajax_wf_item();
+        }
+    
+        var parent_offset_top = parseInt($('.wf-con')[0].offsetTop);
+        //将顶部看不到的div存入fragment
+        $('.wf-row').each(function(){
+            var wf_row_occupy = parseInt(this.offsetTop)+parent_offset_top+$(this).outerHeight();
+            if (document_scroll_top > wf_row_occupy && !$(this).hasClass(empty_class)){
+                $('.wf-con').data('wf_history')[this.id] = $(this).find('.wf-item').detach();
+                $(this).addClass(empty_class);
+            }
+            if (document_scroll_top <= wf_row_occupy && $(this).hasClass(empty_class)){
+                $(this).html($('.wf-con').data('wf_history')[this.id]);
+                delete $('.wf-con').data('wf_history')[this.id];
+                $(this).removeClass(empty_class);
+            }
+        });
+    
+    });
+
+    $(window).bind('scroll', $(window).data('wf_deal_scroll'));
+    
+    
+    $(window).data('wf_resize', function(){
+        $(window).unbind('resize', $(window).data('wf_resize'));
+    
+        setTimeout(function(){
+        
+            if ($('.wf-con').length > 0){
+                $('.wf-con').removeAttr('wf-item-height');
+        
+                $('.wf-row').each(function(){
+                    if ($(this).hasClass('wf-empty')){
+                        $(this).html($('.wf-con').data('wf_history')[this.id]);
+                        delete $('.wf-con').data('wf_history')[this.id];
+                        $(this).removeClass('wf-empty');
+                    }
+                    $('.wf-con').waterfall({
+                        item: $(this).find('.wf-item')
+                        ,resize: true
+                    });
+                });
+        
+            
+            }
+            $(window).bind('resize', $(window).data('wf_resize'));
+        
+        }, 2000);
+    });
+
+    $(window).bind('resize', $(window).data('wf_resize'));  //绑定窗口的resize事件
+    
+    
+    ajax_wf_item();
+});
+
+
+function ajax_wf_item(){
+    $.ajax({
+        type: 'GET'
+        ,data: {}
+        ,url: './wf-item.html'
+        ,dataType: 'html'
+        ,beforeSend: function(){
+            $('.wf-loading').show();
+        }
+        ,success: function(data){
+            setTimeout(function(){
+                $('.wf-con').waterfall({
+                    item: data
+                });
+                //重新绑定滚动事件
+                $(window).bind('scroll', $(window).data('wf_deal_scroll'));
+            }, 1000);
+        }
+        ,complete: function(){
+            setTimeout(function(){
+                $('.wf-loading').hide();
+            }, 1000);
+        }
+    });
+}
+
+
+</script>
+</html>
