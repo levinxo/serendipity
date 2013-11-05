@@ -63,6 +63,7 @@ puts 'pythonpython'.gsub(/python/, 'ruby')
 
 #-----------------------
 # block yield
+# 迭代数组的内容，在each等方法中肯定使用了yield
 
 def call_block
   yield('hello')
@@ -70,6 +71,59 @@ end
 
 call_block { | word | puts word }
 
+words_array.each { | word | puts word }
+
+5.times { print '*' }
+
+3.upto(6) { |i| print i }
+
+('a'..'e').each { |char| print char }
+
+#-----------------------
+# printf
+
+printf("\nNum: %3.2f, String: %s\n", 237844.248, 'hello')
+
+#-----------------------
+# class object
+# 创建对象时首先在内存中保存未初始化的对象，然后调用对象的initialize方法
+# @符号开头的变量为实例变量，每个对象都有实例变量的拷贝
+# 子类继承方法时，应该是增量，而不是直接检验或使用父类的实例变量(低耦合)
+
+class Song
+  
+  def initialize(name, artist, duration)
+    @name = name
+    @artist = artist
+    @duration = duration
+  end
+
+  def to_s
+    "#@name, #@artist (#@duration)"
+  end
+
+end
+
+song = Song.new('ruby', 'ruby song', 4)
+puts song.inspect
+puts song.to_s
+
+class OKSong < Song
+  
+  def initialize(name, artist, duration, lyrics)
+    super(name, artist, duration)
+    @lyrics = lyrics
+  end
+
+  def to_s
+    super + " lyrics: #@lyrics"
+  end
+
+end
+
+song = OKSong.new('ruby', 'ruby song', 4, 'ruby song lyrics')
+puts song.inspect
+puts song.to_s
 
 
 
