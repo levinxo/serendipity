@@ -92,23 +92,38 @@ printf("\nNum: %3.2f, String: %s\n", 237844.248, 'hello')
 
 class Song
   
+  attr_reader :name, :artist, :duration
+  
+  attr_writer :duration
+  
+  @@play_count = 0
+  
   def initialize(name, artist, duration)
     @name = name
     @artist = artist
     @duration = duration
+    @play_count = 0
   end
 
   def to_s
     "#@name, #@artist (#@duration)"
   end
-
+  
+  def play
+    @@play_count += 1
+    @play_count += 1
+    "#@play_count plays, total #@@play_count plays"
+  end
+  
 end
 
-song = Song.new('ruby', 'ruby song', 4)
+song = Song.new('ruby', 'ruby song', 240)
 puts song.inspect
 puts song.to_s
 
 class OKSong < Song
+  
+  attr_reader :lyrics
   
   def initialize(name, artist, duration, lyrics)
     super(name, artist, duration)
@@ -121,13 +136,30 @@ class OKSong < Song
 
 end
 
-song = OKSong.new('ruby', 'ruby song', 4, 'ruby song lyrics')
+song = OKSong.new('ruby', 'ruby song', 240, 'ruby song lyrics')
 puts song.inspect
 puts song.to_s
+puts song.name
+puts song.lyrics
+puts song.duration
+song.duration = 301
+puts song.duration
+puts song.play
+puts song.play
 
+class SongList
+  
+  MAX_TIME = 300
+  
+  def SongList.is_too_long(song)  #如果没加类名前缀，直接调用将提示没有这个方法
+    return song.duration > MAX_TIME
+  end
+  
+end
 
+puts SongList.is_too_long(song)
 
-
+#-----------------------
 
 
 
