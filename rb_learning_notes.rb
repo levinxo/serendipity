@@ -63,13 +63,13 @@ puts 'pythonpython'.gsub(/python/, 'ruby')
 
 #-----------------------
 # block yield
-# 迭代数组的内容，在each等方法中肯定使用了yield
+# 迭代器反复调用block中的代码。迭代数组的each等方法中肯定使用了yield
 
 def call_block
   yield('hello')
 end
 
-call_block { | word | puts word }
+call_block { | word | puts word }   #两个竖线为管道符
 
 words_array.each { | word | puts word }
 
@@ -78,6 +78,35 @@ words_array.each { | word | puts word }
 3.upto(6) { |i| print i }
 
 ('a'..'e').each { |char| print char }
+
+print "\n"
+
+def fib_up_to(max)
+  i1, i2 = 1, 1         #并行赋值
+  while i1 < max
+    yield i1
+    i1, i2 = i2, i1+i2
+  end
+end
+
+fib_up_to(1000) { |f| print f, ' ' }
+
+a = [1, 2]
+b = 'cat'
+a.each { |b| c = b * a[1] }
+puts b                  #=>2    why?为什么b等于2
+puts defined?(c)
+
+puts [1, 2, 'a', 'b'].collect { |x| x.succ }      #=>[2, 3, "b", "c"]    collect将数组元素传递给block，block返回的结果被用来生成一个新的数组。succ为后继的意思
+
+#f = File.open('rb_learning_notes.rb')
+#f.each do |line|
+#  puts line
+#end
+#f.close
+
+puts [1, 2, 3, 4].inject { |sum, ele| sum+ele }   #=>10
+puts [1, 2, 3, 4].inject { |product, ele| product*ele }   #=>24
 
 #-----------------------
 # printf
