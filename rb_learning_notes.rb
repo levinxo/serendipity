@@ -115,6 +115,8 @@ class Song
     "#@play_count plays, total #@@play_count plays"
   end
   
+  public :to_s, :play
+  
 end
 
 song = Song.new('ruby', 'ruby song', 240)
@@ -133,6 +135,8 @@ class OKSong < Song
   def to_s
     super + " lyrics: #@lyrics"
   end
+  
+  public :to_s
 
 end
 
@@ -160,6 +164,54 @@ end
 puts SongList.is_too_long(song)
 
 #-----------------------
+# variables
+# 变量本身不是对象，变量是对象的引用，对象一般存在于heap中
+# 变量可以通过freeze方法阻止被改动
+
+a = 'Tim'
+b = a
+a[0] = 'J'
+puts a
+puts b
+
+a = 'Tim'
+b = a.dup
+a[0] = 'J'
+puts a
+puts b
+
+#-----------------------
+# Array
+# 使用[start, count]来访问数组
+# 使用[start..end]或[start...end]访问数组，两个点表示包含end元素，三个点不包含end元素
+
+a = ['a', 'b', 'c', 'd', 'e']
+
+puts a[1, 2]
+
+puts a[1..2]
+
+puts a[1...2]
+
+a[1] = [1, 2]           #=>["a", [1, 2], "c", "d", "e"]
+
+a[1, 2] = 'cat'         #=>["a", "cat", "d", "e"]
+
+a[1, 0] = 'dog'         #=>["a", "dog", "cat", "d", "e"]
+
+a[1, 1] = ['b', 'c']    #=>["a", "b", "c", "cat", "d", "e"]
+
+a[3..3] = []            #=>["a", "b", "c", "d", "e"]
+
+a[7..8] = 'x', 'y'      #=>["a", "b", "c", "d", "e", nil, nil, "x", "y"]
+
+
+
+
+
+
+
+
 
 
 
