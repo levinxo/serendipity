@@ -108,6 +108,23 @@ puts [1, 2, 'a', 'b'].collect { |x| x.succ }      #=>[2, 3, "b", "c"]    collect
 puts [1, 2, 3, 4].inject { |sum, ele| sum+ele }   #=>10
 puts [1, 2, 3, 4].inject { |product, ele| product*ele }   #=>24
 
+class File                  #其实File类的open方法已经支持了事务block，让文件管理自己的生命周期
+  def File.open_and_process(*args)
+    ret = f = File.open(*args)
+    if block_given?
+      ret = yield f
+      f.close
+    end
+    return ret
+  end
+end
+
+#File.open_and_process('rb_learning_notes.rb', 'r') do |f|
+#  while line = f.gets
+#    puts line
+#  end
+#end
+
 #-----------------------
 # printf
 
@@ -210,30 +227,22 @@ puts a
 puts b
 
 #-----------------------
-# Array
+# Array 数组
 # 使用[start, count]来访问数组
 # 使用[start..end]或[start...end]访问数组，两个点表示包含end元素，三个点不包含end元素
 
 a = ['a', 'b', 'c', 'd', 'e']
 
 puts a[1, 2]
-
 puts a[1..2]
-
 puts a[1...2]
 
 a[1] = [1, 2]           #=>["a", [1, 2], "c", "d", "e"]
-
 a[1, 2] = 'cat'         #=>["a", "cat", "d", "e"]
-
 a[1, 0] = 'dog'         #=>["a", "dog", "cat", "d", "e"]
-
 a[1, 1] = ['b', 'c']    #=>["a", "b", "c", "cat", "d", "e"]
-
 a[3..3] = []            #=>["a", "b", "c", "d", "e"]
-
 a[7..8] = 'x', 'y'      #=>["a", "b", "c", "d", "e", nil, nil, "x", "y"]
-
 
 
 
