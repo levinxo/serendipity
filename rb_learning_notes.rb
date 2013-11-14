@@ -45,7 +45,7 @@ else
   puts 'ret 3'
 end
 
-puts 'hello' if 1
+puts 'hello' if 1     #类似python
 
 square = 2
 square = square*square while square < 100
@@ -93,8 +93,10 @@ fib_up_to(1000) { |f| print f, ' ' }
 
 a = [1, 2]
 b = 'cat'
-a.each { |b| c = b * a[1] }
-puts b                  #=>2    why?为什么b等于2
+a.each { |b| c = b * a[1] }     #此时迭代器将a中的每个值依次传入block，
+                                #上面的b变量将被赋值，最后一次赋值是2，所以下面的b等于2
+                                #不过需要注意的是ruby2.0.0版本已将b变量归为block内部变量
+puts b                  #=>2    why?为什么b等于2，ruby2.0.0版本等于cat保持不变
 puts defined?(c)
 
 puts [1, 2, 'a', 'b'].collect { |x| x.succ }      #=>[2, 3, "b", "c"]    collect将数组元素传递给block，block返回的结果被用来生成一个新的数组。succ为后继的意思
@@ -182,8 +184,6 @@ class OKSong < Song
     super + " lyrics: #@lyrics"
   end
   
-  public :to_s
-
 end
 
 song = OKSong.new('ruby', 'ruby song', 240, 'ruby song lyrics')
