@@ -127,6 +127,20 @@ end
 #  end
 #end
 
+def block_proc(&action)     #在最后一个形参前面加上&符号，调用此函数时，函数会自动寻找block并转化为Proc类的对象传给此参数
+  action
+end
+
+g = block_proc { |n| puts "hi, #{n}" }
+g.call('levin')
+
+def block_proc(times)
+  lambda { |n| puts "hi, #{n*times}" }    #lambda函数可以将block转换为Proc类的对象
+end
+
+g = block_proc(2)
+g.call('levin')
+
 #-----------------------
 # printf
 
@@ -243,6 +257,16 @@ a[1, 0] = 'dog'         #=>["a", "dog", "cat", "d", "e"]
 a[1, 1] = ['b', 'c']    #=>["a", "b", "c", "cat", "d", "e"]
 a[3..3] = []            #=>["a", "b", "c", "d", "e"]
 a[7..8] = 'x', 'y'      #=>["a", "b", "c", "d", "e", nil, nil, "x", "y"]
+
+#-----------------------
+# Numbers 数字
+# 数字的前导0代表八进制，0d代表十进制，0x代表十六进制，0b代表二进制，数字间的下划线会被忽略掉
+
+num = 81
+6.times do
+  puts "#{num.class}: #{num}"
+  num *= num
+end
 
 
 
