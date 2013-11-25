@@ -37,9 +37,9 @@ puts words_hash
 #-----------------------
 # control structures
 
-if 5 > 3
+if 5 < 3
   puts 'ret 1'
-elsif 5 == 3
+elsif 5.nil?
   puts 'ret 2'
 else
   puts 'ret 3'
@@ -267,6 +267,69 @@ num = 81
   puts "#{num.class}: #{num}"
   num *= num
 end
+
+#-----------------------
+# String 字符串
+# 字符串字面量是处于分界符之间的字符序列
+
+puts "now is #{def the(a)
+                 'the '+a
+               end
+               the('time')
+} for all good coders."
+
+puts %q/good time/
+puts %Q^good time^
+puts %Q{hi, #{'j'*2}}       #分界符可以是任何一个非字母数字的单字节字符
+
+print <<EOF
+ggg
+  acc
+EOF
+
+#使用 - 可以缩进编排终结符
+print <<-string1, <<-string2
+  ggx
+  string1
+     gyut
+     string2
+     
+#String.chomp         去掉结尾的换行符
+#String.split         分割字符串成数组
+#String.squeeze       去除重复字符，如果加了感叹号在方法后面，那么直接对对象进行修改，例如String.squeeze!
+#String.scan          匹配某正则并返回
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
