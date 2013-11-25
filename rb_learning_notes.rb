@@ -299,14 +299,20 @@ print <<-string1, <<-string2
 #String.squeeze       去除重复字符，如果加了感叹号在方法后面，那么直接对对象进行修改，例如String.squeeze!
 #String.scan          匹配某正则并返回
 
+#-----------------------
+# Range 区间
+# 实现succ和<=>方法的对象才能作为区间，<=>为太空船操作符，它比较两个值，根据第一个值是否大于、等于、小于第二个值返回+1、0、-1
+# 使用===可以检测某个值是否在区间的间隔内
 
+puts ('bar'..'bat').to_a
 
+digits = 0..9
+puts digits.include?(5)
+puts digits.min
+puts digits.max
+puts digits.reject { |i| i < 5 }    #排除小于5的元素
 
-
-
-
-
-
+puts digits === 3.1415926
 
 
 
