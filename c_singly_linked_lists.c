@@ -46,6 +46,24 @@ int list_insert(list *link_list, int i, ele_type data){
     return 1;
 }
 
+int list_delete(list *link_list, int i, ele_type *data){
+    int j = 0;
+    list del_node;
+    list p = *link_list;
+    while (p && j < i){
+        p = p->next;
+        j++;
+    }
+    if (!p || j > i){
+        return 0;
+    }
+    del_node = p->next;
+    p->next = del_node->next;
+    *data = del_node->data;
+    free(del_node);
+    return 1;
+}
+
 int list_length(list link_list){    //头指针
     int i = 0;
     list p = link_list->next;
@@ -57,11 +75,15 @@ int list_length(list link_list){    //头指针
 
 int main(){
     int i;
+    ele_type del_data;
     list link_list;         //实际上link_list此时为头指针，还未指向头结点，即未赋值
     init_list(&link_list);  //头指针自己的地址
     for (i=0; i<10; i++){
         list_insert(&link_list, 0, 9-i);
     }
     printf("list length: %d\n", list_length(link_list));
+    list_print(link_list);
+    list_delete(&link_list, 5, &del_data);
+    printf("删除第6个元素: %d\n", del_data);
     list_print(link_list);
 }
