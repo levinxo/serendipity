@@ -64,6 +64,33 @@ int list_delete(list *link_list, int i, ele_type *data){
     return 1;
 }
 
+int get_ele(list link_list, int i, ele_type *e){
+    int j = 0;
+    list p = link_list->next;
+    while (p && j < i){
+        p = p->next;
+        j++;
+    }
+    if (!p || j > i){
+        return 0;
+    }
+    *e = p->data;
+    return 1;
+}
+
+int locate_ele(list link_list, ele_type data){
+    int i = 0;
+    list p = link_list->next;
+    while (p){
+        if (p->data == data){
+            return i;
+        }
+        i++;
+        p = p->next;
+    }
+    return -1;
+}
+
 int list_length(list link_list){    //头指针
     int i = 0;
     list p = link_list->next;
@@ -76,6 +103,7 @@ int list_length(list link_list){    //头指针
 int main(){
     int i;
     ele_type del_data;
+    ele_type ele;
     list link_list;         //实际上link_list此时为头指针，还未指向头结点，即未赋值
     init_list(&link_list);  //头指针自己的地址
     for (i=0; i<10; i++){
@@ -86,4 +114,7 @@ int main(){
     list_delete(&link_list, 5, &del_data);
     printf("删除第6个元素: %d\n", del_data);
     list_print(link_list);
+    get_ele(link_list, 6, &ele);
+    printf("获取第7个元素: %d\n", ele);
+    printf("元素3的位置: %d\n", locate_ele(link_list, 3));
 }
