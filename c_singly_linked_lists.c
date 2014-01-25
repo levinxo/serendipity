@@ -91,6 +91,24 @@ int locate_ele(list link_list, ele_type data){
     return -1;
 }
 
+//反转单链表
+void list_reverse(list* link_list){
+    list pfirst = NULL;
+    list p = NULL;
+    if (!(*link_list)->next->next){
+        return;
+    }
+    
+    pfirst = (*link_list)->next;
+    p = pfirst->next;
+    while (p){
+        pfirst->next = p->next;
+        p->next = (*link_list)->next;
+        (*link_list)->next = p;
+        p = pfirst->next;
+    }
+}
+
 int list_length(list link_list){    //头指针
     int i = 0;
     list p = link_list->next;
@@ -117,4 +135,7 @@ int main(){
     get_ele(link_list, 6, &ele);
     printf("获取第7个元素: %d\n", ele);
     printf("元素3的位置: %d\n", locate_ele(link_list, 3));
+    printf("反转单链表: \n");
+    list_reverse(&link_list);
+    list_print(link_list);
 }
