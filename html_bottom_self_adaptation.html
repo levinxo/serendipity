@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bottom self adaptation</title>
+    
+    <style type="text/css">
+    *, *:before, *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        /* 设置为此值时，元素的内边距和边框(不包括margin)不会增加高度和宽度 */
+    }
+    
+    html, body {
+        height: 100%;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    #wrap {
+        min-height: 100%;
+        margin: 0 auto -30px;
+        background: #777;
+    }
+    
+    #footer {
+        height: 30px;
+        background: #f5f5f5;
+    }
+    </style>
+    
+</head>
+<body>
+    
+    <div id="wrap">
+    </div>
+
+    <div id="footer">
+        bottom
+    </div>
+    
+</body>
+</html>
