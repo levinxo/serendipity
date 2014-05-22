@@ -1,0 +1,36 @@
+<style type="text/css">
+    body {
+        margin: 0;
+    }
+    #con {
+        width: 80%;
+        margin: 10% auto;
+    }
+    #block {
+        background: #888;
+        width: 30%;
+        height: 15%;
+        position: relative;
+        margin: auto;
+    }
+</style>
+
+<div id="con">
+    <div id="block" onmouseover="shaking(this);"></div>
+</div>
+
+<script>
+    function shaking(block) {
+        var pos = ['top', 'left'], i = 0;
+
+        var t = setInterval(function(){
+            block.style[pos[i%2]] = (i%4 > 1? '+': '-') + '4px';
+            i++;
+        }, 20);
+
+        block.onmouseout = function(){
+            clearInterval(t);
+            pos.map(function(v){block.style[v] = '0';});
+        };
+    }
+</script>
