@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div>
+    <h3>Reference:</h3>
+    <ul>
+        <li>http://www.w3school.com.cn/jsref/dom_obj_event.asp</li>
+    </ul>
+</div>
+
+<div id="t" style="margin-left: 100px; cursor: default;">
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+    <p>ggggggggg</p>
+</div>
+
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="./js_jq_ext.js"></script>
+<script>
+    $('#t').getMousePos({
+        time_gap: 200,     //ms
+        callback: function(data){       //callback function to get the position result
+            var data = JSON.stringify(data);
+            alert(data);
+            //$.post('http://localhost/pos.cgi', {step: data});
+        }
+    });
+</script>
+</html>
