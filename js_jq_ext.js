@@ -50,3 +50,22 @@
         });
     };
 })(window.jQuery);
+
+/* serialize form data to object format */
+(function($){"use strict";
+    $.fn.serializeObj = $.prototype.serializeObj = function(){
+        var arr = this.serializeArray(), new_obj = {};
+        $(arr).each(function(){
+            if (new_obj[this.name]){
+                if ($.isArray(new_obj[this.name])){
+                    new_obj[this.name].push(this.value);
+                } else {
+                    new_obj[this.name] = [new_obj[this.name], this.value];
+                }
+            } else {
+                new_obj[this.name] = this.value;
+            }
+        });
+        return new_obj;
+    };
+})(window.jQuery);
