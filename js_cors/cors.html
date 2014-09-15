@@ -1,0 +1,20 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- test Cross-Origin Resource Sharing -->
+<button onclick="test_cors();">test cors</button>
+
+<script>
+function test_cors(){
+	$.ajax({
+		type: 'POST',
+		data: {a: 'b'},
+		url: 'http://localhost/cors.php',
+		success: function(data){
+			console.log(data);
+		},
+		error: function(){
+			alert('error');
+		}
+	});
+}
+</script>
