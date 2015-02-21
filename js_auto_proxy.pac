@@ -64,6 +64,16 @@ function FindProxyForURL(url, host){
         //flickr
         ,'*flickr.*'
         ,'*yimg.*'
+        //dropbox
+        ,'*dropbox.*'
+        //name.com
+        ,'*name.*'
+        //linode.com
+        ,'*linode.*'
+        //python.org
+        ,'*python.*'
+        //other
+        ,'*howtogeek.*'
     ];
     //白名单，不需要代理
     var whitelist = [
