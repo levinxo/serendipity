@@ -19,6 +19,8 @@ function FindProxyForURL(url, host){
         ,'*googlesource.*'
         ,'*blogspot.*'
         ,'*blogger.*'
+        ,'*blogblog.*'
+        ,'*googlesyndication.*'
         ,'*golang.*'
         ,'*chrome.*'
         ,'*gmail.*'
@@ -45,6 +47,7 @@ function FindProxyForURL(url, host){
         //twitter
         ,'*twitter.*'
         ,'*twimg.*'
+        ,'*t.*'
         //facebook
         ,'*facebook.*'
         ,'*akamaihd.*'
@@ -72,6 +75,10 @@ function FindProxyForURL(url, host){
         ,'*linode.*'
         //python.org
         ,'*python.*'
+        //disqus.com
+        ,'*disqus.*'
+        //archive.org
+        ,'*archive.*'
         //other
         ,'*howtogeek.*'
     ];
