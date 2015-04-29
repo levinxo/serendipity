@@ -28,7 +28,7 @@ function FindProxyForURL(url, host){
         ,'*googlehosted.*'
         ,'*android.*'
         ,'*googlelabs.*'
-        ,'*goo.gl*'
+        ,'*goo.gl'
         ,'*googlemail.*'
         //youtube
         ,'*youtube.*'
@@ -47,7 +47,7 @@ function FindProxyForURL(url, host){
         //twitter
         ,'*twitter.*'
         ,'*twimg.*'
-        ,'*t.*'
+        ,'*t.co'
         //facebook
         ,'*facebook.*'
         ,'*akamaihd.*'
@@ -60,7 +60,7 @@ function FindProxyForURL(url, host){
         ,'*adobe.*'
         //wordpress
         ,'*wordpress.*'
-        ,'*wp.*'
+        ,'*wp.com'
         ,'*kissmetrics.*'
         //gravatar
         ,'*gravatar.*'
@@ -70,7 +70,7 @@ function FindProxyForURL(url, host){
         //dropbox
         ,'*dropbox.*'
         //name.com
-        ,'*name.*'
+        ,'*name.com'
         //linode.com
         ,'*linode.*'
         //python.org
