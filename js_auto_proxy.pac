@@ -56,6 +56,7 @@ function FindProxyForURL(url, host){
         ,'*giphy.*'
         //amazon
         ,'*amazonaws.*'
+        ,'*cloudfront.net'
         //adobe
         ,'*adobe.*'
         //wordpress
@@ -79,6 +80,10 @@ function FindProxyForURL(url, host){
         ,'*disqus.*'
         //archive.org
         ,'*archive.*'
+        //crashlytics.com
+        ,'*crashlytics.com'
+        ,'*crashlytics.io'
+        ,'*akamai.net'
         //other
         ,'*howtogeek.*'
     ];
