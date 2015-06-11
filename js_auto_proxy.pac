@@ -41,6 +41,10 @@ function FindProxyForURL(url, host){
         ,'*githubusercontent.*'
         ,'*githubapp.*'
         ,'*ghconduit.*'
+        //vimeo
+        ,'*vimeo.com'
+        //yahoo
+        ,'*yahoo.com'
         //wikipedia
         ,'*wikipedia.*'
         ,'*wikimedia.*'
@@ -84,8 +88,12 @@ function FindProxyForURL(url, host){
         ,'*crashlytics.com'
         ,'*crashlytics.io'
         ,'*akamai.net'
+        //bitbucket.org
+        ,'*atlassian.com'
         //other
+        ,'*uproxy.org'
         ,'*howtogeek.*'
+        ,'*w3schools.com'
     ];
     //白名单，不需要代理
     var whitelist = [
