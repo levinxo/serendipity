@@ -74,6 +74,7 @@ function FindProxyForURL(url, host){
         ,'*yimg.*'
         //dropbox
         ,'*dropbox.*'
+        ,'*dropboxusercontent.com'
         //name.com
         ,'*name.com'
         //linode.com
