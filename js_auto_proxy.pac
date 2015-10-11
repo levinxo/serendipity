@@ -30,6 +30,7 @@ function FindProxyForURL(url, host){
         ,'*googlelabs.*'
         ,'*goo.gl'
         ,'*googlemail.*'
+        ,'*angularjs.org'
         //youtube
         ,'*youtube.*'
         ,'*ytimg.*'
