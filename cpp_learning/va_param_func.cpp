@@ -3,7 +3,7 @@
  * @date 2016-10-29
  */
 
-#include "stdarg.h"
+#include <stdarg.h>
 #include <iostream>
 
 int sum(int count, ...){
