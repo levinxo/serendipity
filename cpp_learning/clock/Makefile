@@ -13,5 +13,5 @@ main.o: main.cpp
 	g++ -c main.cpp -o main.o
 
 clean:
-	rm *.o clock core.clock.* -rf
+	rm -rf *.o clock core.clock.*
 
